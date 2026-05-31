@@ -1,9 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import Link from "next/link";
+import { signup } from "@/app/actions/auth";
 
 export default function RegisterPage() {
   const [verified, setVerified] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [state, action, pending] = useActionState(signup, undefined);
+
+  const canSubmit =
+    name.trim() !== "" &&
+    email.trim() !== "" &&
+    password !== "" &&
+    confirmPassword !== "" &&
+    verified;
 
   return (
     <div
@@ -12,8 +25,9 @@ export default function RegisterPage() {
     >
       <div className="w-90% flex justify-center mt-17.5 px-4">
         <div
-          className="bg-white w-full max-w-115 mb-10"
+          className="bg-white w-full mb-10"
           style={{
+            maxWidth: "31.625rem",
             borderRadius: "10px",
             boxShadow: "0px 0px 17.55px 9.45px rgba(0,0,0,0.05)",
             border: 0,
@@ -33,14 +47,24 @@ export default function RegisterPage() {
           {/* Card body */}
           <div className="pb-6">
             <form
-              action="#"
-              method="post"
+              action={action}
               className="mx-auto"
               style={{ width: "85%" }}
             >
+              {/* General error */}
+              {state?.message && (
+                <div className="mb-4 rounded px-3 py-2 bg-red-50 border border-red-200">
+                  <p className="text-sm text-red-600">{state.message}</p>
+                </div>
+              )}
+
               {/* Name */}
               <div className="mb-4">
-                <div className="flex border border-gray-300 rounded">
+                <div
+                  className={`flex border rounded ${
+                    state?.errors?.name ? "border-red-400" : "border-gray-300"
+                  }`}
+                >
                   <div
                     className="flex items-center px-3 bg-white border-r border-gray-300"
                     style={{ minWidth: "46px", justifyContent: "center" }}
@@ -51,16 +75,25 @@ export default function RegisterPage() {
                     type="text"
                     placeholder="Name"
                     name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="flex-1 px-3 text-sm outline-none bg-transparent text-gray-700 placeholder-gray-400"
                     style={{ height: "50px" }}
                     autoComplete="off"
                   />
                 </div>
+                {state?.errors?.name && (
+                  <p className="mt-1 text-xs text-red-500">{state.errors.name[0]}</p>
+                )}
               </div>
 
               {/* Email */}
               <div className="mb-4">
-                <div className="flex border border-gray-300 rounded">
+                <div
+                  className={`flex border rounded ${
+                    state?.errors?.email ? "border-red-400" : "border-gray-300"
+                  }`}
+                >
                   <div
                     className="flex items-center px-3 bg-white border-r border-gray-300"
                     style={{ minWidth: "46px", justifyContent: "center" }}
@@ -71,11 +104,16 @@ export default function RegisterPage() {
                     type="email"
                     placeholder="Email@domain.com"
                     name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="flex-1 px-3 text-sm outline-none bg-transparent text-gray-700 placeholder-gray-400"
                     style={{ height: "50px" }}
                     autoComplete="off"
                   />
                 </div>
+                {state?.errors?.email && (
+                  <p className="mt-1 text-xs text-red-500">{state.errors.email[0]}</p>
+                )}
               </div>
 
               {/* Password */}
@@ -86,7 +124,11 @@ export default function RegisterPage() {
                 >
                   Password
                 </label>
-                <div className="flex border border-gray-300 rounded">
+                <div
+                  className={`flex border rounded ${
+                    state?.errors?.password ? "border-red-400" : "border-gray-300"
+                  }`}
+                >
                   <div
                     className="flex items-center px-3 bg-white border-r border-gray-300"
                     style={{ minWidth: "46px", justifyContent: "center" }}
@@ -97,10 +139,15 @@ export default function RegisterPage() {
                     type="password"
                     placeholder="***************"
                     name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="flex-1 px-3 text-sm outline-none bg-transparent text-gray-700"
                     style={{ height: "50px" }}
                   />
                 </div>
+                {state?.errors?.password && (
+                  <p className="mt-1 text-xs text-red-500">{state.errors.password[0]}</p>
+                )}
               </div>
 
               {/* Repeat Password */}
@@ -111,7 +158,11 @@ export default function RegisterPage() {
                 >
                   Repeat Password
                 </label>
-                <div className="flex border border-gray-300 rounded">
+                <div
+                  className={`flex border rounded ${
+                    state?.errors?.confirm_password ? "border-red-400" : "border-gray-300"
+                  }`}
+                >
                   <div
                     className="flex items-center px-3 bg-white border-r border-gray-300"
                     style={{ minWidth: "46px", justifyContent: "center" }}
@@ -122,13 +173,20 @@ export default function RegisterPage() {
                     type="password"
                     placeholder="***************"
                     name="confirm_password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className="flex-1 px-3 text-sm outline-none bg-transparent text-gray-700"
                     style={{ height: "50px" }}
                   />
                 </div>
+                {state?.errors?.confirm_password && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {state.errors.confirm_password[0]}
+                  </p>
+                )}
               </div>
 
-              {/* Cloudflare Turnstile */}
+              {/* Cloudflare Turnstile (visual placeholder) */}
               <div className="mb-4">
                 <div className="flex items-center justify-between border border-gray-300 rounded px-3 py-2 bg-white">
                   <div className="flex items-center gap-3">
@@ -215,18 +273,19 @@ export default function RegisterPage() {
               <div className="mb-4">
                 <button
                   type="submit"
-                  className="w-full font-bold text-white rounded transition-colors hover:opacity-90"
+                  disabled={pending || !canSubmit}
+                  className="w-full font-bold text-white rounded transition-colors hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: "#0081ff",
                     height: "50px",
                   }}
                 >
-                  Register
+                  {pending ? "Registering…" : "Register"}
                 </button>
 
                 <p className="mt-4 text-sm" style={{ color: "#555555" }}>
                   Already have an account?{" "}
-                  <Link href="/" style={{ color: "#0081ff" }}>
+                  <Link href="/log-in" style={{ color: "#0081ff" }}>
                     Login
                   </Link>
                 </p>

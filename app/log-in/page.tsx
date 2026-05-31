@@ -1,9 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import Link from "next/link";
+import { login } from "@/app/actions/auth";
 
 export default function LoginPage() {
   const [verified, setVerified] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [state, action, pending] = useActionState(login, undefined);
+
+  const canSubmit = email.trim() !== "" && password !== "" && verified;
 
   return (
     <div
@@ -12,8 +18,9 @@ export default function LoginPage() {
     >
       <div className="w-300% flex justify-center mt-17.5 px-4">
         <div
-          className="bg-white w-full max-w-115 mb-10"
+          className="bg-white w-full mb-10"
           style={{
+            maxWidth: "31.625rem",
             borderRadius: "10px",
             boxShadow: "0px 0px 17.55px 9.45px rgba(0,0,0,0.05)",
             border: 0,
@@ -36,11 +43,17 @@ export default function LoginPage() {
           {/* Card body */}
           <div className="pb-6">
             <form
-              action="#"
-              method="post"
+              action={action}
               className="mx-auto"
               style={{ width: "85%" }}
             >
+              {/* General error */}
+              {state?.message && (
+                <div className="mb-4 rounded px-3 py-2 bg-red-50 border border-red-200">
+                  <p className="text-sm text-red-600">{state.message}</p>
+                </div>
+              )}
+
               {/* Email */}
               <div className="mb-4">
                 <label
@@ -49,7 +62,11 @@ export default function LoginPage() {
                 >
                   Email
                 </label>
-                <div className="flex border border-gray-300 rounded">
+                <div
+                  className={`flex border rounded ${
+                    state?.errors?.email ? "border-red-400" : "border-gray-300"
+                  }`}
+                >
                   <div
                     className="flex items-center px-3 bg-white border-r border-gray-300"
                     style={{ minWidth: "46px", justifyContent: "center" }}
@@ -60,11 +77,16 @@ export default function LoginPage() {
                     type="email"
                     placeholder="Email@domain.com"
                     name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="flex-1 px-3 text-sm outline-none bg-transparent text-gray-700 placeholder-gray-400"
                     style={{ height: "50px" }}
                     autoComplete="off"
                   />
                 </div>
+                {state?.errors?.email && (
+                  <p className="mt-1 text-xs text-red-500">{state.errors.email[0]}</p>
+                )}
               </div>
 
               {/* Password */}
@@ -75,7 +97,11 @@ export default function LoginPage() {
                 >
                   Password
                 </label>
-                <div className="flex border border-gray-300 rounded">
+                <div
+                  className={`flex border rounded ${
+                    state?.errors?.password ? "border-red-400" : "border-gray-300"
+                  }`}
+                >
                   <div
                     className="flex items-center px-3 bg-white border-r border-gray-300"
                     style={{ minWidth: "46px", justifyContent: "center" }}
@@ -86,13 +112,18 @@ export default function LoginPage() {
                     type="password"
                     placeholder="***************"
                     name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="flex-1 px-3 text-sm outline-none bg-transparent text-gray-700"
                     style={{ height: "50px" }}
                   />
                 </div>
+                {state?.errors?.password && (
+                  <p className="mt-1 text-xs text-red-500">{state.errors.password[0]}</p>
+                )}
               </div>
 
-              {/* Cloudflare Turnstile */}
+              {/* Cloudflare Turnstile (visual placeholder) */}
               <div className="mb-4">
                 <div className="flex items-center justify-between border border-gray-300 rounded px-3 py-2 bg-white">
                   <div className="flex items-center gap-3">
@@ -179,14 +210,15 @@ export default function LoginPage() {
               <div className="mb-4">
                 <button
                   type="submit"
-                  className="w-full font-bold text-white rounded transition-opacity hover:opacity-90"
+                  disabled={pending || !canSubmit}
+                  className="w-full font-bold text-white rounded transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{ backgroundColor: "#0081ff", height: "50px" }}
                 >
-                  Login
+                  {pending ? "Logging in…" : "Login"}
                 </button>
 
                 <p className="mt-4 text-sm" style={{ color: "#555555" }}>
-                  <Link href="/reset-password" style={{ color: "#0081ff" }}>
+                  <Link href="/#" style={{ color: "#0081ff" }}>
                     Forgot password?
                   </Link>{" "}
                   - Need an account?{" "}

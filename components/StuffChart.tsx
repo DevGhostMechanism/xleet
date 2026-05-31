@@ -60,8 +60,8 @@ export default function StuffChart() {
       </div>
 
       {/* Chart */}
-      <div style={{ height: 240 }} className="px-2 mt-1">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="px-2 mt-1">
+        <ResponsiveContainer width="100%" height={240}>
           <PieChart>
             <Pie
               data={data}

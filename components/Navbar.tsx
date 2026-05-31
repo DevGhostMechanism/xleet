@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { logout } from "@/app/actions/auth";
 
 /* ── shared dropdown hook ── */
 function useDropdown() {
@@ -250,13 +251,15 @@ function AccountDropdown() {
             Add Balance <i className="fa fa-money-bill-alt" />
           </Link>
           <hr className="border-gray-100 my-0.5" />
-          <a
-            href="#"
-            className="flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-100"
-            style={{ color: "#212529" }}
-          >
-            Logout <i className="fa fa-door-open" />
-          </a>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="flex items-center justify-between w-full px-4 py-2 text-sm hover:bg-gray-100"
+              style={{ color: "#212529" }}
+            >
+              Logout <i className="fa fa-door-open" />
+            </button>
+          </form>
         </div>
       )}
     </li>
@@ -641,13 +644,15 @@ export default function Navbar() {
           >
             Add Balance <i className="fa fa-money-bill-alt" />
           </Link>
-          <a
-            href="logout"
-            className="flex items-center justify-between px-3 py-2 text-sm hover:bg-gray-100 rounded"
-            style={{ color: "#dc3545" }}
-          >
-            Logout <i className="fa fa-door-open" />
-          </a>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="flex items-center justify-between w-full px-3 py-2 text-sm hover:bg-gray-100 rounded"
+              style={{ color: "#dc3545" }}
+            >
+              Logout <i className="fa fa-door-open" />
+            </button>
+          </form>
         </div>
       )}
     </nav>

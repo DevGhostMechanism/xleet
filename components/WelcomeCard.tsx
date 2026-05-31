@@ -28,8 +28,8 @@ export default function WelcomeCard({ onOpenTicket }: Props) {
         then click on Report #[Order Id] button.
       </p>
       <p className="mb-3">
-        Our Domains are xle.su || xleet.cc || xleet.la || xleet.io || xleet.site
-        || xleet.pw || xleet.sh || xleet.es || xleet.ax || xleet.is || xleet.pro
+        Our Domains are xleet.website || xleet.cc || xleet.la || xleet.io ||
+        xleet.site || xleet.pw || xleet.sh || xleet.es || xleet.ax || xleet.pro
         - Please Save them!
       </p>
       <a
