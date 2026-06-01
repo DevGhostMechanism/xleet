@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 const WALLETS: Record<string, string> = {
   btc: "bc1qzu77y6g0xwgvrsv7jq9gznyflr5ej23r4w74n8",
   eth: "0x4222CB1B6B6d574c14f2855483B8d80A09f4f0BE",
-  usdt_trc: "0x4222CB1B6B6d574c14f2855483B8d80A09f4f0BE",
+  usdt_trc: "TSNZ8A9KH4LCv94wTtRSx2EnkMNJJNhMCc",
 };
 
 const METHOD_LABELS: Record<string, string> = {
