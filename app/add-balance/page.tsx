@@ -17,8 +17,8 @@ export default function AddBalancePage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const numeric = Number(amount);
-    if (!amount || numeric < 50) {
-      alert("Please deposit at least $50");
+    if (!amount || numeric < 20) {
+      alert("Please deposit at least $20");
       return;
     }
     router.push(`/make-payment?amount=${numeric}&method=${method}`);
@@ -101,12 +101,12 @@ export default function AddBalancePage() {
                     </label>
                     <input
                       type="number"
-                      placeholder="50"
+                      placeholder="20"
                       name="amount"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       required
-                      min="50"
+                      min="20"
                       className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
                     />
                   </div>
@@ -131,8 +131,8 @@ export default function AddBalancePage() {
                     <strong>Bitcoin</strong>/<strong>USDT</strong> is a secure
                     way to fund your account.
                   </li>
-                  <li>Min/Max is 50 USD/5000 USD for BTC &amp; ETH</li>
-                  <li>Min/Max is 50 USD/5000 USD for USDT</li>
+                  <li>Min/Max is 20 USD/5000 USD for BTC &amp; ETH</li>
+                  <li>Min/Max is 20 USD/5000 USD for USDT</li>
                 </ul>
 
                 <p className="text-sm text-gray-700 mb-2">
